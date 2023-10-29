@@ -1,26 +1,21 @@
 import { styled } from 'styled-components'
 
-import { Header } from '../Components/Header'
+import { LeftSideOfScreen } from '../Components/LeftSideOfScreen'
+import { RightSideOfScreen } from '../Components/RightSideOfScreen'
+import { Form } from '../Components/Form'
 
 const Container = styled.main`
   display: flex;
-  flex-direction: column;
-`
-
-const SecondTitle = styled.h2`
-  margin: auto;
-`
-
-const Form = styled.form`
-  margin: auto;
+  height: 100vh;
 `
 
 export function CreateEmployees() {
   return (
     <Container>
-      <Header />
-      <SecondTitle>Create Employee</SecondTitle>
-      <Form action="">form</Form>
+      <LeftSideOfScreen />
+      <RightSideOfScreen>
+        <Form />
+      </RightSideOfScreen>
     </Container>
   )
 }
