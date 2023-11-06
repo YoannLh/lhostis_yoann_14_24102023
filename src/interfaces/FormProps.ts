@@ -1,1 +1,3 @@
-export interface FormProps {}
+export interface FormProps {
+  setModalVisibility: (bool: boolean) => void
+}

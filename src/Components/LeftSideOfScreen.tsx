@@ -1,6 +1,8 @@
 import { styled } from 'styled-components'
 import { Link } from 'react-router-dom'
 
+import { LeftSideOfScreenProps } from '../interfaces/LeftSideOfScreenProps'
+
 const Container = styled.header`
   display: flex;
   flex-direction: column;
@@ -27,14 +29,16 @@ const LinkToListOfEmployees = styled(Link)`
   text-align: center;
 `
 
-export function LeftSideOfScreen() {
+export function LeftSideOfScreen({ page }: LeftSideOfScreenProps) {
   return (
     <Container>
       <TitleContainer>
-        <SecondTitle>Create Employees</SecondTitle>
+        <SecondTitle>
+          {page === 'create' ? 'Create Employees' : 'List of employees'}
+        </SecondTitle>
       </TitleContainer>
-      <LinkToListOfEmployees to="/listOfEmployees">
-        Liste des Employés
+      <LinkToListOfEmployees to={page === 'create' ? `/listOfEmployees` : `/`}>
+        {page === 'create' ? 'List of employees' : 'Create Employees'}
       </LinkToListOfEmployees>
     </Container>
   )

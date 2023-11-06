@@ -2,13 +2,16 @@
 import styled from 'styled-components'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
-import Select from 'react-select'
 import 'react-datepicker/dist/react-datepicker.css'
+import Select from 'react-select'
+import { useDispatch } from 'react-redux'
+import { update } from '../utils/dataSlice'
 
-// import { FormProps } from '../interfaces/FormProps'
+import { FormProps } from '../interfaces/FormProps'
 import { FormInputsProps } from '../interfaces/FormInputsProps'
 import { selectListState } from '../domains/selectListState'
 import { selectListDepartment } from '../domains/selectListDepartment'
+import { dateParser } from '../utils/dateParser'
 
 const StyledForm = styled.form`
   display: flex;
@@ -147,22 +150,52 @@ const Button = styled.button`
   font-size: 1.1em;
 `
 
-export const Form = () => {
+export const Form = ({ setModalVisibility }: FormProps) => {
   const {
     control,
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<FormInputsProps>()
-  const onSubmit: SubmitHandler<FormInputsProps> = (data) => {
-    console.log(data)
+  const dispatch = useDispatch()
+  const onSubmit: SubmitHandler<FormInputsProps> = ({
+    birthDate,
+    city,
+    department,
+    firstName,
+    lastName,
+    startDate,
+    state,
+    street,
+    zip,
+  }) => {
+    const newEmployee = {
+      employee: {
+        birthDate: dateParser(birthDate),
+        city,
+        department: {
+          value: department.value,
+          label: department.label,
+        },
+        firstName,
+        lastName,
+        startDate: dateParser(startDate),
+        state: { value: state.value, label: state.label },
+        street,
+        zip,
+      },
+    }
+    dispatch(update(newEmployee))
+    setModalVisibility(true)
+    reset()
   }
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <WrapperInputAndErrorsMessage>
         <Input
           type="text"
-          placeholder="Prénom"
+          placeholder="Firstname"
           {...register('firstName', {
             required: 'First name is required',
             pattern: {
@@ -179,7 +212,7 @@ export const Form = () => {
       <WrapperInputAndErrorsMessage>
         <Input
           type="text"
-          placeholder="Nom"
+          placeholder="Lastname"
           {...register('lastName', {
             required: 'Last name is required',
             pattern: {
@@ -243,7 +276,7 @@ export const Form = () => {
           {...register('street', {
             required: 'street is required',
             pattern: {
-              value: /^[a-zç-é-è-ë-âA-ZÉ\-']+$/,
+              value: /^[a-zç-é-è-ë-âA-ZÉ\-1-9\s,']+$/,
               message: 'This input is text only.',
             },
           })}
@@ -257,7 +290,7 @@ export const Form = () => {
           {...register('city', {
             required: 'city is required',
             pattern: {
-              value: /^[a-zç-é-è-ë-âA-ZÉ\-']+$/,
+              value: /^[a-zç-é-è-ë-âA-ZÉ\s\-']+$/,
               message: 'This input is text only.',
             },
           })}
@@ -278,7 +311,6 @@ export const Form = () => {
               />
             )}
             control={control}
-            defaultValue=""
           />
           {errors.state && (
             <ErrorMessageDatepickerStateAndZipCode>
@@ -318,7 +350,6 @@ export const Form = () => {
             />
           )}
           control={control}
-          defaultValue=""
         />
         {errors.department && (
           <ErrorMessage>{errors.department.message}</ErrorMessage>

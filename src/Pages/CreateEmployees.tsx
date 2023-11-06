@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { styled } from 'styled-components'
 
 import { LeftSideOfScreen } from '../Components/LeftSideOfScreen'
 import { RightSideOfScreen } from '../Components/RightSideOfScreen'
 import { Form } from '../Components/Form'
+import { Modal } from 'final-project-react-modal'
 
 const Container = styled.main`
   display: flex;
@@ -10,11 +12,23 @@ const Container = styled.main`
 `
 
 export function CreateEmployees() {
+  const [visible, setVisible] = useState(false)
+  function setModalVisibility(bool: boolean) {
+    if (bool) setVisible(true)
+  }
+  function listenCloseIsClicked(isClicked: boolean) {
+    setVisible(isClicked)
+  }
   return (
     <Container>
-      <LeftSideOfScreen />
+      <Modal
+        visibleBool={visible}
+        injectedText="Employee created !"
+        closeIsClicked={listenCloseIsClicked}
+      />
+      <LeftSideOfScreen page="create" />
       <RightSideOfScreen>
-        <Form />
+        <Form setModalVisibility={setModalVisibility} />
       </RightSideOfScreen>
     </Container>
   )
