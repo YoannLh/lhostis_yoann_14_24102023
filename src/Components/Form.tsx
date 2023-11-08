@@ -106,14 +106,7 @@ const StyledSelect = styled(Select)`
     flex: 1;
   }
 
-  & > #react-select-3-listbox {
-    width: 100%;
-    left: 0;
-    padding: 15px 0 0 15px;
-    background: white;
-  }
-
-  & > #react-select-5-listbox {
+  & > .css-100ebu3-menu {
     width: 100%;
     left: 0;
     padding: 15px 0 0 15px;
@@ -311,6 +304,10 @@ export const Form = ({ setModalVisibility }: FormProps) => {
               />
             )}
             control={control}
+            defaultValue={{
+              value: 'state',
+              label: 'State',
+            }}
           />
           {errors.state && (
             <ErrorMessageDatepickerStateAndZipCode>
@@ -350,6 +347,10 @@ export const Form = ({ setModalVisibility }: FormProps) => {
             />
           )}
           control={control}
+          defaultValue={{
+            value: 'department',
+            label: 'Department',
+          }}
         />
         {errors.department && (
           <ErrorMessage>{errors.department.message}</ErrorMessage>
